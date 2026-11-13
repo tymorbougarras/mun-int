@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MUN'int – Site du club</title>
+<link rel="icon" type="image/png" href="img/logo_munint.png">
+<link rel="apple-touch-icon" href="img/logo_munint.png">
+<style>
+/* Concept : une séance de nuit à l'ONU. Fond prune profond, courbes blanches du club, cartes arrondies, papier et cachet de cire pour l'officiel. */
+@font-face{font-family:"Anton";src:url(fonts/anton-latin-400-normal.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-400-normal.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-500-normal.woff2) format("woff2");font-weight:500}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-600-normal.woff2) format("woff2");font-weight:600}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-700-normal.woff2) format("woff2");font-weight:700}
+@font-face{font-family:"Playfair";src:url(fonts/playfair-display-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic}
+@font-face{font-family:"Playfair";src:url(fonts/playfair-display-latin-600-italic.woff2) format("woff2");font-weight:600;font-style:italic}
+@font-face{font-family:"Playfair";src:url(fonts/playfair-display-latin-500-normal.woff2) format("woff2");font-weight:500;font-style:normal}
+:root{
+  --night:#170a1f;      /* fond prune nuit */
+  --plum:#24112f;       /* surfaces */
+  --violet:#5c1b84;     /* violet du club */
+  --indigo:#402978;     /* violet des bannières */
+  --bordeaux:#840707;   /* bordeaux des cartes */
+  --lilac:#c8b6ec;      /* lilas du Grid Post */
+  --paper:#f3e9d8;      /* papier officiel */
+  --ink:#2b1414;
+  --text:#f6eff7; --soft:#cbbcd6; --line:rgba(246,239,247,.14);
+  --display:"Anton",Impact,"Arial Narrow",sans-serif;
+  --serif:"Playfair",Georgia,serif;
+  --body:"Figtree",system-ui,sans-serif;
+  --r:28px; --r-sm:18px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--night)}
+body{background:var(--night);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--lilac);outline-offset:3px;border-radius:8px}
+body.lang-fr .en,body.lang-en .fr{display:none!important}
+body.cover .foot{display:none}
+.wrap{width:min(1200px,100% - 48px);margin:0 auto}
+h1,h2,h3{text-wrap:balance}
+.disp{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.92}
+.it{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--lilac)}
+.eyebrow b{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0;text-transform:none;font-size:16px;color:var(--soft)}
+.todo{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd9a8;background:rgba(255,190,110,.1);border:1px dashed rgba(255,200,140,.55);border-radius:999px;padding:3px 11px;white-space:nowrap;line-height:1.6}
+.paper .todo,.light .todo{color:var(--bordeaux);background:rgba(132,7,7,.06);border-color:rgba(132,7,7,.45)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:12px;z-index:50;margin:12px auto 0;width:min(1240px,100% - 24px);display:flex;align-items:center;gap:18px;padding:10px 10px 10px 16px;border-radius:999px;background:rgba(36,17,47,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand img{height:38px;width:auto}
+.brand span{font-family:var(--display);font-size:22px;letter-spacing:.04em;line-height:1}
+.links{display:flex;gap:4px;margin:0 auto;flex-wrap:nowrap}
+.links a{padding:9px 14px;border-radius:999px;font-size:15px;font-weight:500;color:var(--soft);transition:background .25s,color .25s}
+.links a:hover{color:var(--text);background:rgba(246,239,247,.07)}
+.links a.on{color:var(--night);background:var(--lilac)}
+.lang{display:flex;padding:4px;border-radius:999px;background:rgba(0,0,0,.25);border:1px solid var(--line);flex:none}
+.lang button{padding:6px 11px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:var(--soft)}
+.lang button.on{background:var(--text);color:var(--night)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 24px;border-radius:999px;font-weight:600;font-size:15.5px;background:var(--text);color:var(--night);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(200,182,236,.55)}
+.btn .ar{transition:transform .25s}.btn:hover .ar{transform:translateX(4px)}
+.btn.red{background:var(--bordeaux);color:#fff}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(246,239,247,.35)}
+.btn.lg{padding:18px 30px;font-size:17px}
+.nav .btn{padding:11px 18px;font-size:14.5px;flex:none}
+.burger{display:none;width:42px;height:42px;border-radius:50%;background:rgba(246,239,247,.08);flex:none;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+.burger i{display:block;width:16px;height:1.5px;background:var(--text)}
+
+/* ---------- decor ---------- */
+.curves{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.curves path{fill:none;stroke:rgba(255,255,255,.55);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:2400;stroke-dashoffset:0;animation:draw 2.6s cubic-bezier(.6,.1,.2,1) both}
+.curves path.r{stroke:rgba(194,40,40,.75)}
+.curves path:nth-child(2){animation-delay:.25s}.curves path:nth-child(3){animation-delay:.45s}
+@keyframes draw{from{stroke-dashoffset:2400}to{stroke-dashoffset:0}}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none}
+
+/* ---------- page system ---------- */
+.page{display:none}
+.page.on{display:block;animation:pagein .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes pagein{from{opacity:.4;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rise{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}
+@keyframes rise{from{opacity:.001;transform:translateY(22px)}to{opacity:1;transform:none}}
+section{position:relative}
+.sec{padding:110px 0}
+.h2{font-size:clamp(46px,6vw,84px)}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--soft);max-width:62ch}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;margin-top:-66px;padding:130px 0 70px;min-height:calc(100svh - 70px);display:flex;align-items:center;background:radial-gradient(120% 90% at 0% 0%,#3a0b16 0%,transparent 55%),radial-gradient(90% 80% at 100% 10%,#3b1f6e 0%,transparent 60%),var(--night)}
+.hero .grid{width:min(1200px,100% - 48px);display:grid;grid-template-columns:1.3fr .7fr;gap:56px;align-items:center;position:relative;z-index:2}
+.chip{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 10px;border-radius:999px;background:rgba(246,239,247,.08);border:1px solid var(--line);font-size:13.5px;font-weight:600;letter-spacing:.04em}
+.pulse{width:9px;height:9px;border-radius:50%;background:#ff6b6b;box-shadow:0 0 0 0 rgba(255,107,107,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,107,107,0)}100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}}
+.hero h1{margin-top:26px}
+.hero h1 .disp{display:block;font-size:clamp(60px,8.6vw,124px)}
+.hero h1 .it{display:block;font-size:clamp(46px,6.6vw,96px);white-space:nowrap;line-height:1;margin-top:6px;color:var(--lilac)}
+.hero .sub{font-size:clamp(18px,1.7vw,22px);color:var(--soft);margin-top:24px;max-width:34ch}
+.infos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:34px;max-width:560px}
+.info{padding:14px 18px;border-radius:var(--r-sm);background:rgba(246,239,247,.06);border:1px solid var(--line)}
+.info small{display:block;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac);margin-bottom:4px}
+.info strong{font-weight:600;font-size:17px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;align-items:center}
+.count{display:flex;gap:10px;margin-top:26px}
+.count div{min-width:74px;padding:10px 12px;border-radius:16px;background:rgba(0,0,0,.25);border:1px solid var(--line);text-align:center}
+.count b{display:block;font-family:var(--display);font-size:34px;font-weight:400;line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.poster{position:relative;justify-self:center;width:min(100%,410px);transform:rotate(2.5deg);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.poster:hover{transform:rotate(0) scale(1.01)}
+.sheet{aspect-ratio:210/297;border-radius:14px;background:linear-gradient(160deg,#f7eedf,#eadcc4);box-shadow:0 50px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink);padding:34px;position:relative;overflow:hidden}
+.sheet:before{content:"";position:absolute;inset:14px;border:1.5px dashed rgba(132,7,7,.35);border-radius:8px}
+.sheet .lg{width:44%;opacity:.16}
+.sheet h4{font-family:var(--display);font-weight:400;font-size:30px;letter-spacing:.03em;color:var(--bordeaux);margin-top:18px;line-height:1}
+.sheet p{font-size:14px;color:#6c4b44;margin-top:8px;max-width:24ch}
+.seal{position:absolute;width:104px;height:104px;border-radius:50%;right:-20px;bottom:-26px;background:radial-gradient(circle at 35% 30%,#b12a2a,#7a0b0b 55%,#4e0505);box-shadow:0 10px 24px -6px rgba(0,0,0,.6),inset 0 -6px 12px rgba(0,0,0,.35),inset 0 4px 8px rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;transform:rotate(-12deg)}
+.seal:before{content:"";position:absolute;inset:9px;border-radius:50%;border:2px solid rgba(0,0,0,.18)}
+.seal img{width:60%;opacity:.55;filter:brightness(.6) sepia(.4)}
+.poster .cap{display:flex;justify-content:space-between;margin-top:18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:600}
+
+
+.hero .grid{display:grid;grid-template-columns:560px 1fr;gap:56px;align-items:center}
+.ident{text-align:left}
+.id-logo{width:120px;height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
+.ident h1{margin-top:18px}
+.ident h1 .disp{display:block;font-size:clamp(84px,11vw,180px);line-height:.85}
+.ident h1 .it{display:block;font-size:clamp(30px,3.6vw,52px);line-height:1.1;margin-top:10px;color:var(--lilac);white-space:normal}
+.ident .sub{max-width:44ch}
+.nextmun{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:stretch;border-radius:var(--r);padding:16px;background:rgba(36,17,47,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(200,182,236,.28);box-shadow:0 40px 80px -40px #000}
+.nm-top{display:grid;grid-template-columns:92px 1fr;gap:16px;align-items:center;margin-top:18px}
+.nm-sheet{aspect-ratio:210/297;border-radius:8px;background:linear-gradient(160deg,#f7eedf,#eadcc4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;transform:rotate(-3deg);box-shadow:0 14px 26px -12px #000}
+.nm-sheet img{width:46%;opacity:.25}
+.nm-sheet span{font-family:var(--display);font-size:11px;color:var(--bordeaux);letter-spacing:.04em;line-height:1.1;text-transform:uppercase}
+.nm-top small{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac)}
+.nm-top h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;text-transform:uppercase;margin-top:6px}
+.nm-top h3 .it{display:block;text-transform:none;font-size:27px;color:var(--lilac);margin-top:2px}
+.nm-rows{margin-top:16px;border-top:1px solid var(--line)}
+.nm-rows div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.nm-rows small{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.nextmun .count{margin-top:16px}.nextmun .count div{flex:1;min-width:0}
+
+
+
+.nm-poster{aspect-ratio:210/297;align-self:start;border-radius:14px;background:linear-gradient(160deg,#f7eedf,#eadcc4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;position:relative;box-shadow:0 20px 40px -18px #000;color:var(--bordeaux);padding:16px}
+.nm-poster:before{content:"";position:absolute;inset:9px;border:1.5px dashed rgba(132,7,7,.35);border-radius:8px}
+.nm-poster img{width:42%;opacity:.2}
+.nm-poster b{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.05;text-transform:uppercase}
+.nm-poster span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#7a5a50;font-weight:600}
+.nm-info{display:flex;flex-direction:column;padding:6px 6px 4px 0}
+.nm-info .chip{align-self:flex-start}
+.nm-k{margin-top:14px;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac)}
+.nm-t{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;text-transform:uppercase;margin-top:6px}
+.nm-t .it{display:block;text-transform:none;font-size:26px;color:var(--lilac);margin-top:2px}
+.nextmun .count div{padding:8px 6px}.nextmun .count b{font-size:26px}
+
+
+/* ---------- marquee ---------- */
+.marq{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--plum);overflow:hidden;padding:18px 0}
+.marq .track{display:flex;gap:46px;width:max-content;animation:marq 38s linear infinite}
+.marq span{font-family:var(--display);font-size:30px;letter-spacing:.04em;color:var(--soft);display:flex;align-items:center;gap:46px;white-space:nowrap}
+.marq span:after{content:"✦";font-family:var(--body);font-size:14px;color:var(--bordeaux)}
+.marq em{font-family:var(--serif);font-style:italic;color:var(--lilac);font-size:26px;text-transform:none}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- about (lilac) ---------- */
+.lilac{background:var(--lilac);color:#1d0d27;border-radius:var(--r);margin:0 12px;overflow:hidden}
+.lilac .eyebrow{color:var(--bordeaux)} .lilac .eyebrow b{color:#4a3358}
+.lilac .lead{color:#3a2647}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.about .h2 .it{color:var(--bordeaux)}
+.about p+p{margin-top:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:rgba(255,255,255,.55);border-radius:var(--r-sm);padding:26px 24px;transition:transform .3s,background .3s}
+.stat:hover{transform:translateY(-4px);background:#fff}
+.stat b{font-family:var(--display);font-weight:400;font-size:64px;line-height:1;color:var(--bordeaux);font-variant-numeric:tabular-nums}
+.stat p{font-size:15px;color:#3a2647;margin-top:10px;line-height:1.45}
+
+/* ---------- cards ---------- */
+.cards{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-top:50px}
+.card{border-radius:var(--r);background:var(--plum);border:1px solid var(--line);overflow:hidden;position:relative;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s}
+.card:hover{transform:translateY(-5px);border-color:rgba(200,182,236,.4)}
+.sim{display:grid;grid-template-columns:240px 1fr}
+.sim .pst{background:linear-gradient(160deg,#3a1450,#1f0b2a);display:flex;align-items:center;justify-content:center;padding:26px}
+.sim .pst img{border-radius:10px;box-shadow:0 20px 40px -18px #000;width:100%}
+.sim .bd{padding:30px 30px 28px;display:flex;flex-direction:column}
+.tag{display:inline-block;padding:5px 12px;border-radius:999px;background:rgba(200,182,236,.14);color:var(--lilac);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;align-self:flex-start}
+.card h3{font-family:var(--display);font-weight:400;font-size:40px;line-height:1;text-transform:uppercase;margin-top:16px}
+.card p{color:var(--soft);font-size:16px;margin-top:12px}
+.mini-ph{border-radius:14px;height:150px;background-size:cover;background-position:center;margin-top:18px}
+.more{margin-top:auto;padding-top:18px;font-weight:600;color:var(--lilac);font-size:15px}
+.next{background:linear-gradient(150deg,var(--bordeaux),#4b0f5c);border:0;padding:30px;display:flex;flex-direction:column}
+.next .tag{background:rgba(255,255,255,.14);color:#fff}
+.next .rows{margin-top:20px;border-top:1px solid rgba(255,255,255,.2)}
+.next .rows div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:15px}
+.next .rows small{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#f3c9d5}
+
+/* ---------- gallery ---------- */
+.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:210px;gap:12px;margin-top:46px}
+.gal div{border-radius:var(--r-sm);background-size:cover;background-position:center;transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .5s;filter:saturate(.9)}
+.gal div:hover{transform:scale(1.025);filter:saturate(1.1)}
+.gal .w{grid-column:span 2;grid-row:span 2}
+.gal .t{grid-row:span 2}
+
+/* ---------- whatsapp ---------- */
+.wa{position:relative;overflow:hidden;border-radius:var(--r);background:linear-gradient(120deg,var(--indigo),var(--violet));padding:70px 64px;display:grid;grid-template-columns:1.3fr auto;gap:40px;align-items:center}
+.wa .h2{font-size:clamp(44px,5.4vw,74px)}
+.wa p{color:#e6dcf3;margin-top:16px;max-width:52ch;font-size:18px}
+.wa .side{text-align:center;position:relative;z-index:2}
+.wa .side small{display:block;margin-top:14px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#e6dcf3;font-weight:600}
+
+/* ---------- inner hero ---------- */
+.ihero{position:relative;overflow:hidden;margin-top:-66px;padding:150px 0 70px;background:radial-gradient(90% 90% at 10% 0%,#3a0b16 0%,transparent 55%),radial-gradient(80% 80% at 100% 30%,#3b1f6e 0%,transparent 60%),var(--night)}
+.ihero .grid{display:grid;grid-template-columns:1fr;gap:50px;align-items:end;position:relative;z-index:2}
+.ihero h1 .disp{display:block;font-size:clamp(58px,8vw,124px)}
+.ihero h1 .it{display:block;font-size:clamp(44px,6vw,92px);color:var(--lilac);line-height:1.02}
+.ihero .lead{margin-top:22px}
+.ihero .ph{height:330px;border-radius:var(--r);background-size:cover;background-position:center;transform:rotate(-2deg);box-shadow:0 40px 70px -30px #000;border:6px solid var(--paper)}
+
+/* ---------- club ---------- */
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:50px}
+.tl div{background:var(--plum);border:1px solid var(--line);border-radius:var(--r-sm);padding:22px 18px;transition:transform .3s,border-color .3s}
+.tl div:hover{transform:translateY(-4px);border-color:rgba(200,182,236,.4)}
+.tl .now{background:linear-gradient(160deg,var(--bordeaux),#4b0f5c);border:0}
+.tl small{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lilac)}
+.tl .now small{color:#f3c9d5}
+.tl h4{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1.05;margin-top:10px}
+.tl p{font-size:14.5px;color:var(--soft);margin-top:8px;line-height:1.5}
+.tl .now p{color:#f1dbe4}
+.mission{background:var(--paper);color:var(--ink);border-radius:var(--r);padding:70px 60px;text-align:center;position:relative;overflow:hidden;margin-top:30px}
+.mission q{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(26px,3vw,40px);line-height:1.3;max-width:30ch;margin:22px auto 0;quotes:"« " " »"}
+.mission .seal{position:relative;right:auto;bottom:auto;margin:0 auto;width:84px;height:84px}
+.mission small{display:block;margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--bordeaux)}
+.obj{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:44px}
+.obj div{border-radius:var(--r-sm);padding:22px 20px;background:var(--plum);border:1px solid var(--line)}
+.obj b{font-family:var(--serif);font-style:italic;font-size:30px;color:var(--lilac);font-weight:400}
+.obj p{font-size:15.5px;margin-top:6px;line-height:1.5}
+.how{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.roles div{border-radius:var(--r-sm);padding:22px;background:rgba(255,255,255,.55)}
+.roles h5{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase;color:var(--bordeaux)}
+.roles p{font-size:15px;color:#3a2647;margin-top:6px}
+.steps{border-radius:var(--r-sm);background:#1d0d27;color:var(--text);padding:26px 28px;counter-reset:s}
+.steps li{list-style:none;display:grid;grid-template-columns:44px 1fr;padding:12px 0;border-bottom:1px solid var(--line);font-size:15.5px}
+.steps li:last-child{border:0}
+.steps li:before{counter-increment:s;content:counter(s);font-family:var(--display);font-size:26px;color:var(--lilac);line-height:1}
+.steps li b{display:block;font-weight:600}
+.steps li span{color:var(--soft);font-size:14.5px}
+.proj{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.proj div{border-radius:var(--r-sm);padding:26px;background:var(--plum);border:1px solid var(--line);position:relative;transition:transform .3s,border-color .3s}
+.proj div:hover{transform:translateY(-4px);border-color:rgba(200,182,236,.4)}
+.proj small{font-family:var(--serif);font-style:italic;color:var(--lilac);font-size:17px}
+.proj h4{font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;line-height:1.05;margin-top:10px}
+.proj p{color:var(--soft);font-size:15px;margin-top:8px}
+
+/* ---------- simulations page ---------- */
+.fiche{display:grid;grid-template-columns:400px 1fr;gap:56px;align-items:start}
+.fiche .pw{border-radius:var(--r);padding:12px;background:linear-gradient(160deg,#3a1450,#1f0b2a);border:1px solid var(--line)}
+.fiche .pw img{border-radius:16px;width:100%}
+.fiche .pw p{text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:600;padding:12px 0 4px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.blocs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.blocs div{border-radius:var(--r-sm);padding:18px;background:var(--plum);border:1px solid var(--line);border-top:4px solid #3b6fd8}
+.blocs div:nth-child(2){border-top-color:#c22828}
+.blocs div:nth-child(3){border-top-color:#d6b25e}
+.blocs h5{font-size:16px;font-weight:700}
+.blocs p{font-size:14px;color:var(--soft);margin-top:4px;line-height:1.45}
+.palm{border-radius:var(--r);background:radial-gradient(80% 120% at 50% 0%,#5b0f1f,transparent 70%),linear-gradient(180deg,#2a0d33,#170a1f);border:1px solid var(--line);padding:70px 50px;text-align:center;position:relative;overflow:hidden}
+.awards{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px;margin-top:46px;align-items:end}
+.award{border-radius:var(--r);padding:34px 22px 26px;background:rgba(246,239,247,.05);border:1px solid var(--line)}
+.award.gold{padding-top:46px;background:linear-gradient(180deg,rgba(214,178,94,.16),rgba(246,239,247,.04));border-color:rgba(214,178,94,.45)}
+.medal{width:92px;height:92px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#f7e2a6,#c99a3b 60%,#8a6420);box-shadow:0 14px 30px -10px rgba(0,0,0,.7),inset 0 -5px 10px rgba(0,0,0,.25);font-family:var(--display);font-size:38px;color:#4a3305}
+.award:not(.gold) .medal{background:radial-gradient(circle at 35% 30%,#f3f0f6,#b9b2c4 60%,#7c7488);color:#3a3346}
+.award small{display:block;margin-top:18px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--lilac)}
+.award h4{font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;margin-top:6px;line-height:1.05}
+.award .who{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;color:var(--soft)}
+.upcoming{display:grid;grid-template-columns:1fr 330px;gap:50px;align-items:center}
+.upcoming .sheet{transform:rotate(2deg)}
+
+/* ---------- bureau ---------- */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:46px}
+.member{border-radius:var(--r);background:var(--plum);border:1px solid var(--line);padding:12px 12px 22px;transition:transform .35s,border-color .35s}
+.member:hover{transform:translateY(-5px);border-color:rgba(200,182,236,.4)}
+.member .pp{aspect-ratio:4/5;border-radius:20px;background:linear-gradient(160deg,#3a1450,#22102d);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden}
+.member .pp img{width:42%;opacity:.18}
+.member .pp.has{background:#790000}
+.member .pp img.pic{width:100%;height:100%;object-fit:cover;opacity:1;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.member:hover .pp img.pic{transform:scale(1.04)}
+.member .role{display:inline-block;margin:18px 10px 0;padding:5px 12px;border-radius:999px;background:var(--bordeaux);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.member h4{font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;margin:12px 10px 0;line-height:1.02}
+.member .co{margin:4px 10px 0;font-family:var(--serif);font-style:italic;color:var(--lilac);font-size:15px}
+.member q{display:block;margin:12px 10px 0;quotes:none}
+.ask{border-radius:var(--r);background:linear-gradient(150deg,var(--bordeaux),#4b0f5c);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+.ask img{width:76px}
+.ask h4{font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;margin-top:18px;line-height:1.05}
+.ask p{font-size:14px;margin-top:10px;color:#f1dbe4;word-break:break-all}
+.past{margin-top:30px;border-radius:var(--r);background:var(--plum);border:1px solid var(--line);padding:30px;display:grid;grid-template-columns:220px 1fr;gap:30px;align-items:center}
+.past .y{font-family:var(--display);font-size:52px;line-height:1}
+.past .ppl{display:flex;flex-wrap:wrap;gap:10px}
+.past .ppl span{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(246,239,247,.06);border:1px solid var(--line);font-size:14px;color:var(--soft)}
+.past .ppl i{width:30px;height:30px;border-radius:50%;background:#3a1450;display:block}
+
+/* ---------- activités ---------- */
+.acts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:46px}
+.act{border-radius:var(--r);overflow:hidden;background:var(--plum);border:1px solid var(--line);transition:transform .35s,border-color .35s}
+.act:hover{transform:translateY(-5px);border-color:rgba(200,182,236,.4)}
+.act .im{height:260px;background-size:cover;background-position:center;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.act:hover .im{transform:scale(1.04)}
+.act .bd{padding:26px 28px 30px;position:relative;background:var(--plum)}
+.act .n{font-family:var(--serif);font-style:italic;color:var(--lilac);font-size:18px}
+.act h4{font-family:var(--display);font-weight:400;font-size:34px;text-transform:uppercase;line-height:1;margin-top:8px}
+.act p{color:var(--soft);font-size:16px;margin-top:10px}
+
+/* ---------- rejoindre ---------- */
+.conds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.conds div{border-radius:var(--r);padding:30px 26px;background:rgba(255,255,255,.55)}
+.conds b{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--bordeaux);font-weight:400}
+.conds h4{font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;line-height:1.05;margin-top:8px;color:#1d0d27}
+.conds p{font-size:15.5px;color:#3a2647;margin-top:8px}
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+.path div{border-radius:var(--r-sm);padding:24px;background:var(--plum);border:1px solid var(--line);position:relative}
+.path b{font-family:var(--display);font-size:46px;font-weight:400;color:var(--lilac);line-height:1}
+.path h5{font-size:18px;font-weight:700;margin-top:12px}
+.path p{font-size:15px;color:var(--soft);margin-top:6px}
+.faq{margin-top:44px;display:flex;flex-direction:column;gap:10px}
+.faq details{border-radius:var(--r-sm);background:var(--plum);border:1px solid var(--line);padding:0 24px;transition:border-color .3s}
+.faq details[open]{border-color:rgba(200,182,236,.45)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;font-size:19px;font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font-size:26px;font-weight:400;color:var(--lilac);transition:transform .3s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--soft);max-width:70ch}
+
+/* ---------- contact ---------- */
+.chans{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:44px}
+.chan{border-radius:var(--r);padding:34px;min-height:250px;display:flex;flex-direction:column;background:var(--plum);border:1px solid var(--line);transition:transform .35s}
+.chan:hover{transform:translateY(-5px)}
+.chan.a{background:linear-gradient(150deg,var(--bordeaux),#4b0f5c);border:0}
+.chan.b{background:linear-gradient(150deg,var(--indigo),var(--violet));border:0}
+.chan.c{background:var(--paper);color:var(--ink);border:0}
+.chan small{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+.chan h4{font-family:var(--display);font-weight:400;font-size:38px;text-transform:uppercase;line-height:1.02;margin-top:12px;word-break:break-word}
+.chan p{margin-top:10px;font-size:16px;opacity:.85;max-width:44ch}
+.chan .bot{margin-top:auto;padding-top:24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* ---------- footer ---------- */
+.foot{margin-top:110px;background:#0f0614;border-radius:var(--r) var(--r) 0 0;padding:70px 0 34px;position:relative;overflow:hidden}
+.foot .top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.foot .big{font-family:var(--display);font-size:clamp(64px,10vw,150px);line-height:.85;letter-spacing:.01em;color:rgba(246,239,247,.92)}
+.foot p{color:var(--soft);font-size:15.5px;margin-top:16px;max-width:40ch}
+.foot h5{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lilac);margin-bottom:14px}
+.foot nav a{display:block;padding:4px 0;color:var(--soft);transition:color .2s}
+.foot nav a:hover{color:var(--text)}
+.foot .soc{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.foot .mail{display:inline-block;margin-top:18px;border-bottom:1px solid rgba(246,239,247,.4);padding-bottom:2px}
+.schools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;margin-top:56px;padding-top:28px;border-top:1px solid var(--line)}
+.schools .l{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.schools .chipimg{background:#fff;border-radius:14px;height:70px;padding:10px 16px;display:flex;align-items:center}
+.schools .chipimg img{height:50px;width:auto}
+.schools em{font-family:var(--serif);color:var(--soft);font-size:16px}
+.schools small{color:#8f7f9c;font-size:13px}
+
+/* ---------- responsive ---------- */
+
+
+
+
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+<style id="mq">
+@media (max-width:960px){.hero .grid{grid-template-columns:1fr}.ident{order:-1}.nextmun{max-width:460px}}
+@media (max-width:620px){.nextmun{grid-template-columns:1fr}.nm-poster{width:min(100%,300px);justify-self:center}}
+@media (max-width:1180px){.links a{padding:8px 9px;font-size:14px}.nav{gap:10px}.nav .btn{padding:10px 14px}}
+@media (max-width:960px){
+  .nav{flex-wrap:wrap;border-radius:26px;row-gap:8px}.nav .lang{margin-left:auto}
+  .links{order:5;width:100%;margin:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.links::-webkit-scrollbar{display:none}.links a{flex:none}
+  .hero,.ihero{margin-top:-120px;padding-top:190px}
+  .hero .grid,.ihero .grid,.about,.cards,.fiche,.upcoming,.wa,.how,.foot .top{grid-template-columns:1fr}
+  .poster{margin-top:20px}
+  .tl{grid-template-columns:repeat(2,1fr)}.obj{grid-template-columns:repeat(2,1fr)}
+  .proj,.conds,.team{grid-template-columns:repeat(2,1fr)}
+  .stats,.path{grid-template-columns:repeat(2,1fr)}
+  .gal{grid-template-columns:repeat(2,1fr)}
+  .fiche .pw{max-width:420px}
+  .ihero .ph{height:240px}
+}
+@media (max-width:620px){
+  body{font-size:16px}
+  .wrap{width:calc(100% - 32px)}
+  .sec{padding:72px 0}
+  .nav .btn{display:none}
+  .brand span{font-size:19px}
+  .hero{padding:190px 0 60px}.ihero{padding:190px 0 50px}
+  .infos{grid-template-columns:1fr 1fr}
+  .count div{min-width:0;flex:1}
+  .sim{grid-template-columns:1fr}.sim .pst img{max-width:220px}
+  .tl,.obj,.proj,.conds,.team,.acts,.chans,.blocs,.facts,.roles,.awards{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}.stat b{font-size:48px}
+  .path{grid-template-columns:1fr}
+  .gal{grid-auto-rows:150px}
+  .wa{padding:44px 24px}.wa .side .btn{width:100%}
+  .lilac{margin:0 8px}
+  .mission{padding:50px 24px}.palm{padding:50px 20px}
+  .past{grid-template-columns:1fr}
+  .foot{margin-top:72px}
+}
+@media (max-width:620px){.hero .curves,.wa .curves,.ihero .curves{display:none}.poster{transform:rotate(1deg)}.seal{right:-8px}}
+</style>
+<style>
+.pcbtn{display:none;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.06em;background:rgba(200,182,236,.16);color:var(--lilac);border:1px solid rgba(200,182,236,.35);flex:none}
+@media (max-width:960px){.pcbtn{display:inline-flex}}
+body.pc{width:1440px}
+body.pc .pcbtn{display:inline-flex}
+</style>
+</head>
+<body class="lang-fr">
+
+<header class="nav" id="top">
+  <a class="brand" href="#accueil"><img src="img/logo_munint_white.png" alt="MUN'int"><span>MUN’INT</span></a>
+  <nav class="links">
+    <a href="#accueil" data-p="accueil"><span class="fr">Accueil</span><span class="en">Home</span></a>
+    <a href="#club" data-p="club"><span class="fr">Le club</span><span class="en">The club</span></a>
+    <a href="#simulations" data-p="simulations"><span class="fr">Simulations</span><span class="en">Simulations</span></a>
+    <a href="#bureau" data-p="bureau"><span class="fr">Le bureau</span><span class="en">The board</span></a>
+    <a href="#activites" data-p="activites"><span class="fr">Activités</span><span class="en">Activities</span></a>
+    <a href="#rejoindre" data-p="rejoindre"><span class="fr">Rejoindre</span><span class="en">Join</span></a>
+    <a href="#contact" data-p="contact"><span class="fr">Contact</span><span class="en">Contact</span></a>
+  </nav>
+  <button class="pcbtn" id="pcbtn" type="button"><span class="fr">Version PC</span><span class="en">Desktop view</span></button>
+  <div class="lang" role="group" aria-label="Langue"><button id="b-fr" class="on" type="button">FR</button><button id="b-en" type="button">EN</button></div>
+  <a class="btn" href="#rejoindre"><span class="fr">Rejoindre</span><span class="en">Join us</span> <span class="ar">→</span></a>
+  
+</header>
+
+<!-- ===================== ACCUEIL ===================== -->
+<main class="page" id="p-accueil">
+<section class="hero">
+  <div class="blob" style="width:420px;height:420px;background:#840707;left:-120px;top:120px"></div>
+  <div class="blob" style="width:480px;height:480px;background:#5c1b84;right:-140px;top:-60px"></div>
+  <svg class="curves" viewBox="0 0 1440 900" preserveAspectRatio="none"><path d="M-40,860 C140,800 260,930 470,890 C620,862 640,820 760,840 C880,858 900,900 1010,920"/><path class="r" d="M1480,90 C1360,150 1420,300 1290,330 C1180,356 1140,260 1050,300"/><path d="M1490,640 C1400,700 1450,820 1360,880"/></svg>
+  <div class="wrap grid">
+    <aside class="nextmun rise d2">
+      <div class="nm-poster"><img src="img/logo_munint.png" alt=""><b><span class="fr">Affiche à fournir</span><span class="en">Poster to come</span></b><span>A4 · <span class="fr">jamais recadrée</span><span class="en">never cropped</span></span></div>
+      <div class="nm-info">
+        <span class="chip"><span class="pulse"></span><span class="fr">Prochain MUN</span><span class="en">Next MUN</span></span>
+        <small class="nm-k"><span class="fr">Procès historique</span><span class="en">Historical trial</span></small>
+        <h3 class="nm-t"><span class="fr">Le procès de</span><span class="en">The trial of</span> <span class="it">Harry Truman</span></h3>
+        <div class="nm-rows">
+          <div><small><span class="fr">Date</span><span class="en">Date</span></small><span><span class="fr">Jeu. 19 nov.</span><span class="en">Thu. 19 Nov</span></span></div>
+          <div><small><span class="fr">Heure</span><span class="en">Time</span></small><span class="todo"><span class="fr">À fournir</span><span class="en">To come</span></span></div>
+          <div><small><span class="fr">Comité</span><span class="en">Committee</span></small><span class="todo"><span class="fr">À fournir</span><span class="en">To come</span></span></div>
+          <div><small><span class="fr">Lieu</span><span class="en">Venue</span></small><span>Instagram</span></div>
+        </div>
+        <div class="count"><div><b id="cd-d">6</b><span><span class="fr">jours</span><span class="en">days</span></span></div><div><b id="cd-h">00</b><span><span class="fr">h</span><span class="en">h</span></span></div><div><b id="cd-m">00</b><span>min</span></div></div>
+        <a class="btn" href="#simulations" style="width:100%;margin-top:14px"><span class="fr">S’inscrire</span><span class="en">Sign up</span> <span class="ar">→</span></a>
+      </div>
+    </aside>
+    <div class="ident">
+      <img class="id-logo rise" src="img/logo_munint_white.png" alt="Logo MUN'int">
+      <h1 class="rise d1"><span class="disp">MUN’INT</span><span class="it"><span class="fr">le club de débat onusien de l’INT</span><span class="en">the UN-style debate club of INT</span></span></h1>
+      <p class="sub rise d2"><span class="fr">Représentez un pays, négociez, faites voter vos résolutions. Comme à l’ONU, sur le campus de Télécom SudParis et IMT-BS.</span><span class="en">Represent a country, negotiate, pass your resolutions. Just like at the UN, on the Télécom SudParis and IMT-BS campus.</span></p>
+      <div class="ctas rise d3"><a class="btn lg red" href="#rejoindre"><span class="fr">Rejoindre le club</span><span class="en">Join the club</span> <span class="ar">→</span></a><a class="btn ghost lg" href="#club"><span class="fr">Découvrir le club</span><span class="en">Discover the club</span></a></div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="track">
+  <span>États-Unis</span><span>URSS</span><span><em>Cuba</em></span><span>Royaume-Uni</span><span>France</span><span>Ghana</span><span>Chili</span><span>Irlande</span><span>Roumanie</span><span>Venezuela</span><span>Égypte</span><span><em>Conseil de sécurité · 1962</em></span>
+  <span>États-Unis</span><span>URSS</span><span><em>Cuba</em></span><span>Royaume-Uni</span><span>France</span><span>Ghana</span><span>Chili</span><span>Irlande</span><span>Roumanie</span><span>Venezuela</span><span>Égypte</span><span><em>Conseil de sécurité · 1962</em></span>
+</div></div>
+
+</main>
+
+<!-- ===================== CLUB ===================== -->
+<main class="page" id="p-club">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#840707;left:-120px;top:60px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Le club</span><span class="en">The club</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">Un club pour</span><span class="en">A club to</span></span><span class="it"><span class="fr">apprendre à convaincre.</span><span class="en">learn to persuade.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Né en 2025 sur le campus d’Évry, MUN’int réunit les étudiants de Télécom SudParis et d’IMT-BS autour d’une idée simple : débattre comme à l’ONU.</span><span class="en">Started in 2025 on the Évry campus, MUN’int brings together students from Télécom SudParis and IMT-BS around one simple idea: debating like at the UN.</span></p></div>
+  </div>
+</section>
+<section style="padding-top:40px"><div class="lilac"><div class="wrap" style="padding:60px 0"><div class="stats">
+    <div class="stat"><b>65</b><p><span class="fr">membres dans notre communauté WhatsApp</span><span class="en">members in our WhatsApp community</span></p></div>
+    <div class="stat"><b>25</b><p><span class="fr">délégations pour la crise de Cuba</span><span class="en">delegations for the Cuban crisis</span></p></div>
+    <div class="stat"><b>1H30</b><p><span class="fr">de débat à 20 membres sur le trafic d’armes</span><span class="en">of debate with 20 members on arms trafficking</span></p></div>
+    <div class="stat"><b>2025</b><p><span class="fr">année de création, au sein du BDE</span><span class="en">the year we started, within the student union</span></p></div>
+  </div>
+</div></div></div></section>
+<section class="sec" style="padding-top:60px"><div class="wrap">
+  <span class="eyebrow"><b>I.</b> <span class="fr">Notre histoire</span><span class="en">Our story</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">D’une idée</span><span class="en">From an idea</span> <span class="it"><span class="fr">à une communauté.</span><span class="en">to a community.</span></span></h2>
+  <div class="tl">
+    <div><small><span class="fr">Sept. 2025</span><span class="en">Sept. 2025</span></small><h4><span class="fr">Le club est lancé</span><span class="en">The club is born</span></h4><p><span class="fr">Fondé par Tymor Bougarras et Lou Dixneuf, en 1re année de bachelor, et rattaché au BDE.</span><span class="en">Founded by Tymor Bougarras and Lou Dixneuf in their first bachelor year, as part of the student union.</span></p></div>
+    <div><small><span class="fr">Février 2026</span><span class="en">Feb. 2026</span></small><h4><span class="fr">Séance de découverte</span><span class="en">Discovery session</span></h4><p><span class="fr">Pour initier les curieux au MUN et à ses règles.</span><span class="en">To introduce curious students to MUN and its rules.</span></p></div>
+    <div><small><span class="fr">Printemps 2026</span><span class="en">Spring 2026</span></small><h4><span class="fr">La communauté grandit</span><span class="en">The community grows</span></h4><p><span class="fr">65 membres sur WhatsApp et un débat de 1h30 à 20 sur le trafic d’armes illégales.</span><span class="en">65 members on WhatsApp and a 1.5-hour debate with 20 members on illegal arms trafficking.</span></p></div>
+    <div><small><span class="fr">Sept. 2026</span><span class="en">Sept. 2026</span></small><h4><span class="fr">Deuxième rentrée</span><span class="en">Second year</span></h4><p><span class="fr">Nouvelle campagne d’inscriptions pour 2026-2027.</span><span class="en">A new sign-up campaign for 2026–2027.</span></p></div>
+    <div><small><span class="fr">14 oct. 2026</span><span class="en">14 Oct. 2026</span></small><h4><span class="fr">Crise de Cuba</span><span class="en">Cuban crisis</span></h4><p><span class="fr">Première simulation de l’année, 25 délégations au Conseil de sécurité.</span><span class="en">First simulation of the year, 25 delegations at the Security Council.</span></p></div>
+    <div class="now"><small><span class="fr">19 nov. 2026</span><span class="en">19 Nov. 2026</span></small><h4><span class="fr">Procès Truman</span><span class="en">Truman trial</span></h4><p><span class="fr">Notre premier procès historique. Inscriptions ouvertes.</span><span class="en">Our first historical trial. Sign-ups are open.</span></p></div>
+  </div>
+  <div class="mission paper">
+    <div class="seal"><img src="img/logo_munint_white.png" alt=""></div>
+    <small><span class="fr">II. Notre mission</span><span class="en">II. Our mission</span></small>
+    <q><span class="fr">Le MUN’int a pour mission de donner aux élèves l’opportunité de développer des compétences essentielles pour leur avenir, tout en les sensibilisant aux enjeux internationaux.</span><span class="en">MUN’int’s mission is to give students the chance to build skills that matter for their future, while raising their awareness of international issues.</span></q>
+  </div>
+</div></section>
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <span class="eyebrow"><b>III.</b> <span class="fr">Nos objectifs</span><span class="en">Our goals</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Ce que l’on</span><span class="en">What you’ll</span> <span class="it"><span class="fr">vient chercher.</span><span class="en">get out of it.</span></span></h2>
+  <div class="obj">
+    <div><b>a)</b><p><span class="fr">Initier au débat et à l’éloquence, en français comme en anglais.</span><span class="en">Learn debate and public speaking, in French and in English.</span></p></div>
+    <div><b>b)</b><p><span class="fr">Développer l’argumentation, l’esprit critique et la prise de parole.</span><span class="en">Build reasoning, critical thinking and speaking skills.</span></p></div>
+    <div><b>c)</b><p><span class="fr">S’initier à la diplomatie, à la négociation et au compromis.</span><span class="en">Discover diplomacy, negotiation and compromise.</span></p></div>
+    <div><b>d)</b><p><span class="fr">Progresser en anglais grâce à des simulations en anglais.</span><span class="en">Improve your English through simulations held in English.</span></p></div>
+    <div><b>e)</b><p><span class="fr">Organiser des formations régulières et des simulations internes.</span><span class="en">Run regular training and internal simulations.</span></p></div>
+  </div>
+</div></section>
+<section style="padding-bottom:40px"><div class="lilac"><div class="wrap" style="padding:80px 0">
+  <span class="eyebrow"><b>IV.</b> <span class="fr">Qu’est-ce qu’un MUN ?</span><span class="en">What is a MUN?</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Une simulation</span><span class="en">A UN simulation,</span> <span class="it"><span class="fr">de l’ONU, en vrai.</span><span class="en">for real.</span></span></h2>
+  <p class="lead" style="margin-top:16px"><span class="fr">Chacun représente un pays, défend ses intérêts et négocie pour faire voter une résolution. On parle à la 3e personne, on lève sa pancarte pour prendre la parole, et on reste toujours diplomate.</span><span class="en">Each participant represents a country, defends its interests and negotiates to pass a resolution. You speak in the third person, raise your placard to take the floor, and always stay diplomatic.</span></p>
+  <div class="how">
+    <div class="roles">
+      <div><h5><span class="fr">Les délégués</span><span class="en">Delegates</span></h5><p><span class="fr">Vous. Chacun parle au nom d’un pays.</span><span class="en">You. Each speaks for a country.</span></p></div>
+      <div><h5><span class="fr">La présidence</span><span class="en">The chairs</span></h5><p><span class="fr">Elle donne la parole et tient le temps.</span><span class="en">They give the floor and keep time.</span></p></div>
+      <div><h5><span class="fr">Le comité</span><span class="en">The committee</span></h5><p><span class="fr">L’organe de l’ONU que l’on simule.</span><span class="en">The UN body being simulated.</span></p></div>
+      <div><h5><span class="fr">La résolution</span><span class="en">The resolution</span></h5><p><span class="fr">Le texte final, négocié puis voté.</span><span class="en">The final text, negotiated then voted.</span></p></div>
+    </div>
+    <ol class="steps">
+      <li><div><b><span class="fr">L’appel</span><span class="en">Roll call</span></b><span><span class="fr">Chaque délégation répond « présente ».</span><span class="en">Each delegation answers "present".</span></span></div></li>
+      <li><div><b><span class="fr">Discours d’ouverture</span><span class="en">Opening speeches</span></b><span><span class="fr">Une minute pour poser sa position.</span><span class="en">One minute to set out your position.</span></span></div></li>
+      <li><div><b><span class="fr">Débats</span><span class="en">Debate</span></b><span><span class="fr">Caucus modérés et non modérés.</span><span class="en">Moderated and unmoderated caucuses.</span></span></div></li>
+      <li><div><b><span class="fr">Résolution</span><span class="en">Resolution</span></b><span><span class="fr">Les alliances rédigent un projet de texte.</span><span class="en">Alliances draft a text.</span></span></div></li>
+      <li><div><b><span class="fr">Le vote</span><span class="en">The vote</span></b><span><span class="fr">Amendements, puis vote final.</span><span class="en">Amendments, then the final vote.</span></span></div></li>
+    </ol>
+  </div>
+</div></div></section>
+<section class="sec" style="padding-top:70px"><div class="wrap">
+  <span class="eyebrow"><b>V.</b> <span class="fr">Nos projets</span><span class="en">Our projects</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Ce que nous voulons</span><span class="en">What we want</span> <span class="it"><span class="fr">construire.</span><span class="en">to build.</span></span></h2>
+  <div class="proj">
+    <div><small><span class="fr">Projet 01</span><span class="en">Project 01</span></small><h4><span class="fr">Des réunions chaque semaine</span><span class="en">Weekly meetings</span></h4><p><span class="fr">Nous mettrons en place un rendez-vous hebdomadaire pour débattre et s’entraîner.</span><span class="en">We will set up a weekly session to debate and practise.</span></p></div>
+    <div><small><span class="fr">Projet 02</span><span class="en">Project 02</span></small><h4><span class="fr">Des conférences en groupe</span><span class="en">Conferences as a team</span></h4><p><span class="fr">Nous irons ensemble à des conférences MUN d’autres écoles.</span><span class="en">We will attend MUN conferences hosted by other schools.</span></p></div>
+    <div><small><span class="fr">Projet 03</span><span class="en">Project 03</span></small><h4><span class="fr">Des sorties diplomatiques</span><span class="en">Diplomatic visits</span></h4><p><span class="fr">Nous organiserons des visites à l’ONU, dans les institutions européennes et des ambassades.</span><span class="en">We will organise visits to the UN, EU institutions and embassies.</span></p></div>
+    <div><small><span class="fr">Projet 04</span><span class="en">Project 04</span></small><h4><span class="fr">Un grand rendez-vous annuel</span><span class="en">A big annual event</span></h4><p><span class="fr">Nous créerons une simulation inter-écoles sur notre campus.</span><span class="en">We will create an inter-school simulation on our campus.</span></p></div>
+    <div><small><span class="fr">Projet 05</span><span class="en">Project 05</span></small><h4><span class="fr">Des partenariats</span><span class="en">Partnerships</span></h4><p><span class="fr">Nous nouerons des liens avec d’autres écoles et universités.</span><span class="en">We will build links with other schools and universities.</span></p></div>
+    <div><small><span class="fr">Projet 06</span><span class="en">Project 06</span></small><h4><span class="fr">L’international</span><span class="en">Going international</span></h4><p><span class="fr">À terme, nous représenterons nos écoles dans de grandes conférences à l’étranger.</span><span class="en">In the long run, we will represent our schools at major conferences abroad.</span></p></div>
+  </div>
+</div></section>
+</main>
+
+<!-- ===================== SIMULATIONS ===================== -->
+<main class="page" id="p-simulations">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#5c1b84;right:-100px;top:40px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Simulations</span><span class="en">Simulations</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">Nos</span><span class="en">Our</span></span><span class="it"><span class="fr">simulations.</span><span class="en">simulations.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Chaque simulation a son comité, son époque et son affiche. Voici celles que nous avons vécues, et celle qui arrive.</span><span class="en">Each simulation has its own committee, era and poster. Here are the ones we’ve done, and the one coming up.</span></p></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:60px"><div class="wrap">
+  <div class="fiche">
+    <div class="pw"><img src="img/affiche_cuba.png" alt="Affiche de la simulation Crise de Cuba"><p><span class="fr">Affiche de la simulation</span><span class="en">Simulation poster</span></p></div>
+    <div><span class="tag"><span class="fr">Simulation n° 02 · Conseil de sécurité</span><span class="en">Simulation no. 02 · Security Council</span></span>
+      <h2 class="h2 disp" style="margin-top:16px"><span class="fr">La crise des missiles</span><span class="en">The Cuban Missile</span> <span class="it"><span class="fr">de Cuba.</span><span class="en">Crisis.</span></span></h2>
+      <p class="lead" style="margin-top:14px"><span class="fr">New York, 23 octobre 1962. Un avion espion U-2 vient de photographier des missiles soviétiques à 150 km de la Floride, et Kennedy annonce un blocus naval. Le vrai Conseil n’avait voté aucune résolution : nos délégations ont repris la séance.</span><span class="en">New York, 23 October 1962. A U-2 spy plane has photographed Soviet missiles 150 km from Florida, and Kennedy announces a naval blockade. The real Council passed no resolution: our delegations picked up the session.</span></p>
+      <div class="facts">
+        <div class="info"><small><span class="fr">Date</span><span class="en">Date</span></small><strong><span class="fr">Mer. 14 oct. 2026</span><span class="en">Wed. 14 Oct. 2026</span></strong></div>
+        <div class="info"><small><span class="fr">Comité</span><span class="en">Committee</span></small><strong><span class="fr">Conseil de sécurité</span><span class="en">Security Council</span></strong></div>
+        <div class="info"><small><span class="fr">Délégations</span><span class="en">Delegations</span></small><strong>25</strong></div>
+      </div>
+      <div class="blocs">
+        <div><h5><span class="fr">Camp américain</span><span class="en">US camp</span></h5><p><span class="fr">États-Unis, Royaume-Uni, France, Chine (Taïwan), Chili, Venezuela</span><span class="en">USA, UK, France, China (Taiwan), Chile, Venezuela</span></p></div>
+        <div><h5><span class="fr">Camp soviétique</span><span class="en">Soviet camp</span></h5><p><span class="fr">URSS, Roumanie, avec Cuba</span><span class="en">USSR, Romania, with Cuba</span></p></div>
+        <div><h5><span class="fr">Non-alignés</span><span class="en">Non-aligned</span></h5><p><span class="fr">Ghana, Égypte, Irlande</span><span class="en">Ghana, Egypt, Ireland</span></p></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+<section style="padding-bottom:30px"><div class="wrap"><div class="palm">
+  <svg class="curves" viewBox="0 0 1200 600" preserveAspectRatio="none"><path class="r" d="M-30,520 C120,460 220,620 420,570"/><path d="M1230,40 C1130,90 1170,210 1060,240"/></svg>
+  <span class="eyebrow" style="position:relative"><span class="fr">Palmarès · Crise de Cuba</span><span class="en">Awards · Cuban crisis</span></span>
+  <h2 class="h2 disp" style="margin-top:14px;position:relative"><span class="fr">Ils ont fait</span><span class="en">They made</span> <span class="it"><span class="fr">l’histoire.</span><span class="en">history.</span></span></h2>
+  <div class="awards" style="position:relative">
+    <div class="award"><div class="medal">II</div><small><span class="fr">Prix II</span><span class="en">Prize II</span></small><h4><span class="fr">Intitulé à fournir</span><span class="en">Title to come</span></h4><div class="who"><span class="todo"><span class="fr">Lauréat·e à fournir</span><span class="en">Winner to come</span></span><span class="fr">Délégation à fournir</span><span class="en">Delegation to come</span></div></div>
+    <div class="award gold"><div class="medal">I</div><small><span class="fr">Prix I</span><span class="en">Prize I</span></small><h4><span class="fr">Meilleur délégué</span><span class="en">Best delegate</span></h4><div class="who"><span class="todo"><span class="fr">Lauréat·e à fournir</span><span class="en">Winner to come</span></span><span class="fr">Délégation à fournir</span><span class="en">Delegation to come</span></div></div>
+    <div class="award"><div class="medal">III</div><small><span class="fr">Prix III</span><span class="en">Prize III</span></small><h4><span class="fr">Intitulé à fournir</span><span class="en">Title to come</span></h4><div class="who"><span class="todo"><span class="fr">Lauréat·e à fournir</span><span class="en">Winner to come</span></span><span class="fr">Délégation à fournir</span><span class="en">Delegation to come</span></div></div>
+  </div>
+</div></div></section>
+<section class="sec" style="padding-top:80px;padding-bottom:0"><div class="wrap">
+  <div class="fiche">
+    <div class="pw"><img src="img/affiche_armes.png" alt="Affiche de la séance du 25 mars 2026"><p><span class="fr">Affiche de la séance</span><span class="en">Session poster</span></p></div>
+    <div><span class="tag"><span class="fr">Simulation n° 01 · Débat</span><span class="en">Simulation no. 01 · Debate</span></span>
+      <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Le trafic d’armes</span><span class="en">Illegal arms</span> <span class="it"><span class="fr">illégales.</span><span class="en">trafficking.</span></span></h2>
+      <p class="lead" style="margin-top:14px"><span class="fr">Notre premier grand débat : 20 membres réunis pendant 1h30 pour négocier une réponse internationale au trafic d’armes illégales.</span><span class="en">Our first big debate: 20 members spent 1.5 hours negotiating an international response to illegal arms trafficking.</span></p>
+      <div class="facts">
+        <div class="info"><small><span class="fr">Date</span><span class="en">Date</span></small><strong><span class="fr">25 mars 2026</span><span class="en">25 March 2026</span></strong></div>
+        <div class="info"><small><span class="fr">Participants</span><span class="en">Participants</span></small><strong>20</strong></div>
+        <div class="info"><small><span class="fr">Durée</span><span class="en">Length</span></small><strong>1h30</strong></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+<section class="sec" style="padding-top:80px"><div class="wrap upcoming">
+  <div><span class="tag"><span class="fr">Simulation n° 03 · À venir</span><span class="en">Simulation no. 03 · Coming up</span></span>
+    <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Le procès de</span><span class="en">The trial of</span> <span class="it">Harry Truman.</span></h2>
+    <p class="lead" style="margin-top:14px"><span class="fr">Hiroshima et Nagasaki, août 1945. Pour la première fois, MUN’int passe au format procès historique. Préparez vos arguments.</span><span class="en">Hiroshima and Nagasaki, August 1945. For the first time, MUN’int moves to a historical trial format. Get your arguments ready.</span></p>
+    <div class="facts">
+      <div class="info"><small><span class="fr">Date</span><span class="en">Date</span></small><strong><span class="fr">Jeu. 19 nov. 2026</span><span class="en">Thu. 19 Nov 2026</span></strong></div>
+      <div class="info"><small><span class="fr">Heure · Comité</span><span class="en">Time · Committee</span></small><span class="todo"><span class="fr">À fournir</span><span class="en">To come</span></span></div>
+      <div class="info"><small><span class="fr">Lieu</span><span class="en">Venue</span></small><strong>Instagram</strong></div>
+    </div>
+    <div class="ctas"><a class="btn lg" href="#rejoindre"><span class="fr">S’inscrire</span><span class="en">Sign up</span> <span class="ar">→</span></a></div></div>
+  <div class="sheet"><img class="lg" src="img/logo_munint.png" alt=""><h4><span class="fr">Affiche à fournir</span><span class="en">Poster to come</span></h4><p><span class="fr">A4 portrait, jamais recadrée</span><span class="en">A4 portrait, never cropped</span></p></div>
+</div></section>
+</main>
+
+<!-- ===================== BUREAU ===================== -->
+<main class="page" id="p-bureau">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#840707;left:-120px;top:60px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Le bureau</span><span class="en">The board</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">Ceux qui tiennent</span><span class="en">The people</span></span><span class="it"><span class="fr">la séance.</span><span class="en">running the session.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Sept étudiants qui préparent les simulations, forment les nouveaux et font vivre le club toute l’année.</span><span class="en">Seven students who prepare the simulations, train newcomers and keep the club going all year.</span></p></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:60px"><div class="wrap">
+  <span class="eyebrow"><b>I.</b> <span class="fr">Bureau 2026-2027</span><span class="en">Board 2026–2027</span></span>
+  <div class="team">
+    <div class="member"><div class="pp"><img src="img/logo_munint_white.png" alt=""><span class="todo"><span class="fr">Photo à fournir</span><span class="en">Photo to come</span></span></div>
+<span class="role"><span class="fr">Président</span><span class="en">President</span></span><h4>Tymor Bougarras</h4><div class="co"><span class="fr">Co-fondateur</span><span class="en">Co-founder</span></div><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp has"><img class="pic" src="img/bureau_lou.jpg" alt="Lou Dixneuf"></div>
+<span class="role"><span class="fr">Vice-présidente</span><span class="en">Vice-President</span></span><h4>Lou Dixneuf</h4><div class="co"><span class="fr">Co-fondatrice</span><span class="en">Co-founder</span></div><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp has"><img class="pic" src="img/bureau_mathieu.jpg" alt="Mathieu Viala"></div>
+<span class="role"><span class="fr">Vice-président</span><span class="en">Vice-President</span></span><h4>Mathieu Viala</h4><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp has"><img class="pic" src="img/bureau_timothee.jpg" alt="Timothée Truong"></div>
+<span class="role"><span class="fr">Secrétaire générale</span><span class="en">Secretary General</span></span><h4>Timothée Truong</h4><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp has"><img class="pic" src="img/bureau_violette.jpg" alt="Violette Milian"></div>
+<span class="role"><span class="fr">Trésorière</span><span class="en">Treasurer</span></span><h4>Violette Milian</h4><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp"><img src="img/logo_munint_white.png" alt=""><span class="todo"><span class="fr">Photo à fournir</span><span class="en">Photo to come</span></span></div>
+<span class="role"><span class="fr">Responsable communication</span><span class="en">Head of Communications</span></span><h4>Emrick Rakotomahefason</h4><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+<div class="member"><div class="pp has"><img class="pic" src="img/bureau_marwa.jpg" alt="Marwa Ouaboun"></div>
+<span class="role"><span class="fr">Événementiel et logistique</span><span class="en">Events and Logistics</span></span><h4>Marwa Ouaboun</h4><q><span class="todo"><span class="fr">Citation à fournir</span><span class="en">Quote to come</span></span></q></div>
+
+    <div class="ask"><img src="img/logo_munint_white.png" alt=""><h4><span class="fr">Une question pour le bureau ?</span><span class="en">A question for the board?</span></h4><p>modelunitednationsint@gmail.com</p></div>
+  </div>
+  <span class="eyebrow" style="margin-top:80px;display:flex"><b>II.</b> <span class="fr">Anciens bureaux</span><span class="en">Past boards</span></span>
+  <div class="past"><div><div class="y">2025-2026</div><p style="color:var(--soft);margin-top:6px"><span class="fr">Le bureau fondateur</span><span class="en">The founding board</span></p></div>
+    <div class="ppl"><span><i></i><span class="todo"><span class="fr">Nom · rôle à fournir</span><span class="en">Name · role to come</span></span></span><span><i></i><span class="todo"><span class="fr">Nom · rôle à fournir</span><span class="en">Name · role to come</span></span></span><span><i></i><span class="todo"><span class="fr">Nom · rôle à fournir</span><span class="en">Name · role to come</span></span></span><span><i></i><span class="todo"><span class="fr">Nom · rôle à fournir</span><span class="en">Name · role to come</span></span></span></div></div>
+</div></section>
+</main>
+
+<!-- ===================== ACTIVITES ===================== -->
+<main class="page" id="p-activites">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#5c1b84;right:-100px;top:40px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Activités</span><span class="en">Activities</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">Ce qu’on fait,</span><span class="en">What we do,</span></span><span class="it"><span class="fr">concrètement.</span><span class="en">for real.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Voici ce qui se passe réellement au club, toute l’année.</span><span class="en">Here’s what actually happens at the club, all year long.</span></p></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:60px"><div class="wrap">
+  <div class="acts">
+    <div class="act"><div class="bd"><span class="n">01</span><h4><span class="fr">Des simulations sur le campus</span><span class="en">Simulations on campus</span></h4><p><span class="fr">Conseil de sécurité, procès historique… On recrée une vraie séance : recherches sur son pays, prises de parole, négociation et rédaction de résolutions.</span><span class="en">Security Council, historical trial… We recreate a real session: researching your country, speaking, negotiating and drafting resolutions.</span></p></div></div>
+    <div class="act"><div class="bd"><span class="n">02</span><h4><span class="fr">Des séances de découverte</span><span class="en">Discovery sessions</span></h4><p><span class="fr">Pour les débutants : règles de procédure, vocabulaire et codes du MUN, pour que personne n’arrive perdu.</span><span class="en">For beginners: rules of procedure, vocabulary and MUN codes, so nobody feels lost.</span></p></div></div>
+    <div class="act"><div class="bd"><span class="n">03</span><h4><span class="fr">Des débats entre membres</span><span class="en">Debates between members</span></h4><p><span class="fr">Sur l’actualité internationale. Le dernier a réuni 20 membres pendant 1h30 sur le trafic d’armes illégales.</span><span class="en">On current world affairs. The last one brought 20 members together for 1.5 hours on illegal arms trafficking.</span></p></div></div>
+    <div class="act"><div class="bd"><span class="n">04</span><h4><span class="fr">Les coulisses des événements</span><span class="en">Behind the scenes</span></h4><p><span class="fr">Organisation, communication, logistique, création des affiches : chacun peut mettre la main à la pâte.</span><span class="en">Organisation, communication, logistics, poster design: everyone can pitch in.</span></p></div></div>
+  </div>
+</div></section>
+</main>
+
+<!-- ===================== REJOINDRE ===================== -->
+<main class="page" id="p-rejoindre">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#840707;left:-120px;top:60px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Rejoindre</span><span class="en">Join</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">La séance</span><span class="en">The session</span></span><span class="it"><span class="fr">est ouverte.</span><span class="en">is open.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Rejoindre MUN’int prend une minute. Voici tout ce qu’il faut savoir.</span><span class="en">Joining MUN’int takes one minute. Here’s everything you need to know.</span></p></div>
+  </div>
+</section>
+<section style="padding:30px 0 0"><div class="lilac"><div class="wrap" style="padding:80px 0">
+  <span class="eyebrow"><b>I.</b> <span class="fr">Conditions</span><span class="en">Who can join</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Qui peut</span><span class="en">Who can</span> <span class="it"><span class="fr">nous rejoindre ?</span><span class="en">join us?</span></span></h2>
+  <div class="conds">
+    <div><b>a)</b><h4><span class="fr">Être à TSP ou IMT-BS</span><span class="en">Study at TSP or IMT-BS</span></h4><p><span class="fr">Le club est réservé aux étudiants des deux écoles. Vous venez d’ailleurs ? Le CINUP vous accueillera.</span><span class="en">The club is for students of both schools. Studying elsewhere? The CINUP will welcome you.</span></p></div>
+    <div><b>b)</b><h4><span class="fr">Aucune expérience requise</span><span class="en">No experience needed</span></h4><p><span class="fr">Ni géopolitique, ni aisance à l’oral : on vous forme.</span><span class="en">No politics, no public-speaking skills required: we’ll help you learn.</span></p></div>
+    <div><b>c)</b><h4><span class="fr">Juste l’envie de débattre</span><span class="en">Just want to debate</span></h4><p><span class="fr">Diplomatie, conseil, finance ou simples rencontres : il y a une place pour vous.</span><span class="en">Diplomacy, consulting, finance or just meeting people: there’s a place for you.</span></p></div>
+  </div>
+</div></div></section>
+<section class="sec" style="padding-top:80px"><div class="wrap">
+  <span class="eyebrow"><b>II.</b> <span class="fr">Le déroulé</span><span class="en">How it works</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">De la curiosité</span><span class="en">From curious</span> <span class="it"><span class="fr">à la tribune.</span><span class="en">to the podium.</span></span></h2>
+  <div class="path">
+    <div><b>1</b><h5><span class="fr">Rejoignez la communauté</span><span class="en">Join the community</span></h5><p><span class="fr">Un clic sur le lien WhatsApp et vous recevez toutes les annonces.</span><span class="en">One click on the WhatsApp link and you get every announcement.</span></p></div>
+    <div><b>2</b><h5><span class="fr">Repérez une séance</span><span class="en">Pick a session</span></h5><p><span class="fr">Date et salle sont annoncées sur Instagram et WhatsApp.</span><span class="en">Date and room are announced on Instagram and WhatsApp.</span></p></div>
+    <div><b>3</b><h5><span class="fr">Recevez votre pays</span><span class="en">Get your country</span></h5><p><span class="fr">On vous attribue une délégation et on vous aide à préparer votre position.</span><span class="en">You get a delegation and help preparing your position.</span></p></div>
+    <div><b>4</b><h5><span class="fr">Prenez la parole</span><span class="en">Take the floor</span></h5><p><span class="fr">Le jour J, vous débattez, négociez et votez.</span><span class="en">On the day, you debate, negotiate and vote.</span></p></div>
+  </div>
+</div></section>
+<section><div class="wrap"><div class="wa">
+  <svg class="curves" viewBox="0 0 1200 500" preserveAspectRatio="none"><path d="M-30,490 C120,470 220,540 420,520"/><path class="r" d="M1230,40 C1130,90 1170,210 1060,240"/></svg>
+  <div style="position:relative;z-index:2"><span class="eyebrow" style="color:#e6dcf3"><b style="color:#e6dcf3">III.</b> <span class="fr">Communauté</span><span class="en">Community</span></span>
+    <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Tout commence</span><span class="en">It all starts</span> <span class="it"><span class="fr">sur WhatsApp.</span><span class="en">on WhatsApp.</span></span></h2>
+    <p><span class="fr">Dates, salles, inscriptions, débats : tout passe par notre communauté. Le lien est aussi en bio de notre Instagram.</span><span class="en">Dates, rooms, sign-ups, debates: it all happens in our community. The link is also in our Instagram bio.</span></p></div>
+  <div class="side"><a class="btn lg"><span class="fr">Rejoindre la communauté</span><span class="en">Join the community</span> <span class="ar">→</span></a><small><span class="fr">65 membres déjà dedans</span><span class="en">65 members already in</span></small><div style="margin-top:10px"><span class="todo"><span class="fr">Lien à fournir</span><span class="en">Link to come</span></span></div></div>
+</div></div></section>
+<section class="sec" style="padding-top:90px"><div class="wrap">
+  <span class="eyebrow"><b>IV.</b> <span class="fr">Questions fréquentes</span><span class="en">FAQ</span></span>
+  <h2 class="h2 disp" style="margin-top:16px"><span class="fr">Vous vous demandez</span><span class="en">You’re probably</span> <span class="it"><span class="fr">sûrement…</span><span class="en">wondering…</span></span></h2>
+  <div class="faq">
+    <details open><summary><span class="fr">Faut-il parler anglais ?</span><span class="en">Do I need to speak English?</span></summary><p><span class="fr">Non. On débat en français comme en anglais, et le club est là pour vous aider à progresser, à votre rythme.</span><span class="en">No. We debate in French and in English, and the club is here to help you improve at your own pace.</span></p></details>
+    <details><summary><span class="fr">Faut-il s’y connaître en politique ?</span><span class="en">Do I need to know about politics?</span></summary><p><span class="fr">Pas du tout. Avant chaque simulation, on explique le contexte et les positions de chaque pays. La curiosité suffit.</span><span class="en">Not at all. Before each simulation, we explain the context and each country’s position. Curiosity is enough.</span></p></details>
+    <details><summary><span class="fr">Je ne suis pas à l’aise à l’oral.</span><span class="en">I’m not comfortable speaking in public.</span></summary><p><span class="fr">C’est le cas de beaucoup de membres au départ. On commence par des prises de parole courtes et on progresse ensemble.</span><span class="en">Many members felt the same at first. We start with short speeches and improve together.</span></p></details>
+    <details><summary><span class="fr">Où ont lieu les séances ?</span><span class="en">Where do sessions take place?</span></summary><p><span class="fr">Sur le campus d’Évry. La salle change à chaque fois : elle est annoncée sur Instagram et dans la communauté WhatsApp.</span><span class="en">On the Évry campus. The room changes every time: it’s announced on Instagram and in the WhatsApp community.</span></p></details>
+    <details><summary><span class="fr">Je ne suis ni à TSP ni à IMT-BS.</span><span class="en">I’m not at TSP or IMT-BS.</span></summary><p><span class="fr">Le club est réservé aux étudiants des deux écoles. Pour les autres, le CINUP est une très bonne porte d’entrée.</span><span class="en">The club is for students of both schools. For everyone else, the CINUP is a great way in.</span></p></details>
+  </div>
+</div></section>
+</main>
+
+<!-- ===================== CONTACT ===================== -->
+<main class="page" id="p-contact">
+<section class="ihero">
+  <div class="blob" style="width:380px;height:380px;background:#5c1b84;right:-100px;top:40px"></div>
+  <svg class="curves" viewBox="0 0 1440 700" preserveAspectRatio="none"><path d="M-40,690 C160,650 300,720 520,700"/><path class="r" d="M1480,60 C1360,120 1420,260 1290,290"/></svg>
+  <div class="wrap grid">
+    <div><span class="eyebrow rise"><span class="fr">Contact</span><span class="en">Contact</span></span>
+      <h1 class="rise d1"><span class="disp"><span class="fr">Écrivez-</span><span class="en">Write</span></span><span class="it"><span class="fr">nous.</span><span class="en">to us.</span></span></h1>
+      <p class="lead rise d2"><span class="fr">Une question, une idée de simulation ? Choisissez votre canal, on vous répond vite.</span><span class="en">A question, an idea for a simulation? Pick your channel, we’ll get back to you quickly.</span></p></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:60px"><div class="wrap">
+  <div class="chans">
+    <div class="chan a"><small>Instagram</small><h4><span class="fr">Les annonces et les coulisses</span><span class="en">News and behind the scenes</span></h4><p><span class="fr">Dates, salles, photos des simulations. Le lien WhatsApp est en bio.</span><span class="en">Dates, rooms, simulation photos. The WhatsApp link is in our bio.</span></p><div class="bot"><a class="btn"><span class="fr">Suivre MUN’int</span><span class="en">Follow MUN’int</span> <span class="ar">↗</span></a><span class="todo"><span class="fr">Lien à fournir</span><span class="en">Link to come</span></span></div></div>
+    <div class="chan b"><small>WhatsApp</small><h4><span class="fr">La communauté du club</span><span class="en">The club community</span></h4><p><span class="fr">Le meilleur moyen de ne rien manquer et de discuter avec les membres.</span><span class="en">The best way to never miss anything and chat with members.</span></p><div class="bot"><a class="btn"><span class="fr">Rejoindre</span><span class="en">Join</span> <span class="ar">↗</span></a><span class="todo"><span class="fr">Lien à fournir</span><span class="en">Link to come</span></span></div></div>
+    <div class="chan c paper"><small>E-mail</small><h4>modelunitednationsint<br>@gmail.com</h4><p><span class="fr">Pour les demandes plus longues, les écoles et les partenaires.</span><span class="en">For longer requests, schools and partners.</span></p><div class="bot"><a class="btn red" href="mailto:modelunitednationsint@gmail.com"><span class="fr">Nous écrire</span><span class="en">Write to us</span> <span class="ar">→</span></a></div></div>
+    <div class="chan"><small>BDE</small><h4><span class="fr">Notre page sur le site du BDE</span><span class="en">Our student union page</span></h4><p><span class="fr">MUN’int est un club rattaché au BDE du campus.</span><span class="en">MUN’int is a club of the campus student union.</span></p><div class="bot"><a class="btn ghost"><span class="fr">Voir la page</span><span class="en">See the page</span> <span class="ar">↗</span></a><span class="todo"><span class="fr">Lien à fournir</span><span class="en">Link to come</span></span></div></div>
+  </div>
+</div></section>
+</main>
+
+<footer class="foot">
+  <svg class="curves" viewBox="0 0 1440 500" preserveAspectRatio="none" style="opacity:.6"><path class="r" d="M1480,60 C1380,120 1420,240 1300,270"/></svg>
+  <div class="wrap" style="position:relative">
+    <div class="top">
+      <div><div class="big">MUN’INT</div><p><span class="fr">Le club de Model United Nations du campus d’Évry. On débat, on négocie, on écrit des résolutions, comme à l’ONU.</span><span class="en">The Model United Nations club of the Évry campus. We debate, negotiate and write resolutions, just like at the UN.</span></p><a class="mail" href="mailto:modelunitednationsint@gmail.com">modelunitednationsint@gmail.com</a></div>
+      <nav><h5><span class="fr">Navigation</span><span class="en">Menu</span></h5><a href="#accueil"><span class="fr">Accueil</span><span class="en">Home</span></a><a href="#club"><span class="fr">Le club</span><span class="en">The club</span></a><a href="#simulations">Simulations</a><a href="#bureau"><span class="fr">Le bureau</span><span class="en">The board</span></a><a href="#activites"><span class="fr">Activités</span><span class="en">Activities</span></a><a href="#rejoindre"><span class="fr">Rejoindre</span><span class="en">Join</span></a><a href="#contact">Contact</a></nav>
+      <div><h5><span class="fr">Nous suivre</span><span class="en">Follow us</span></h5><div class="soc"><a class="btn">Instagram <span class="ar">↗</span></a><a class="btn ghost"><span class="fr">Communauté WhatsApp</span><span class="en">WhatsApp community</span> <span class="ar">↗</span></a><span class="todo"><span class="fr">Liens à fournir</span><span class="en">Links to come</span></span></div></div>
+    </div>
+    <div class="schools"><div class="l"><div class="chipimg"><img src="img/logo_tsp.png" alt="Télécom SudParis"></div><div class="chipimg"><img src="img/logo_imtbs.png" alt="IMT Business School" style="height:44px"></div><em><span class="fr">Club de Télécom SudParis et IMT Business School</span><span class="en">A club of Télécom SudParis and IMT Business School</span></em></div><small>© 2026 MUN’int · <span class="fr">Rattaché au BDE</span><span class="en">Part of the student union</span></small></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var pages=["accueil","club","simulations","bureau","activites","rejoindre","contact"];
+  function go(h){ if(pages.indexOf(h)<0) h="accueil";
+    pages.forEach(function(p){document.getElementById("p-"+p).classList.toggle("on",p===h)});
+    document.querySelectorAll(".links a").forEach(function(a){a.classList.toggle("on",a.dataset.p===h); if(a.dataset.p===h&&a.scrollIntoView){try{a.scrollIntoView({block:"nearest",inline:"center"})}catch(e){}}});
+    document.body.classList.toggle("cover",h==="accueil");
+    window.scrollTo(0,0); }
+  function show(){go((location.hash||"#accueil").slice(1))}
+  document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]'); if(!a) return; var h=a.getAttribute("href").slice(1); if(pages.indexOf(h)<0) return;
+    e.preventDefault(); go(h); try{history.replaceState(null,"","#"+h)}catch(err){} });
+  window.addEventListener("hashchange",show); show();
+  function setLang(l){document.body.className="lang-"+l;document.documentElement.lang=l;
+    document.getElementById("b-fr").classList.toggle("on",l==="fr");document.getElementById("b-en").classList.toggle("on",l==="en");
+    try{localStorage.setItem("munint-lang",l)}catch(e){}}
+  document.getElementById("b-fr").onclick=function(){setLang("fr")};
+  document.getElementById("b-en").onclick=function(){setLang("en")};
+  try{var s=localStorage.getItem("munint-lang");if(s)setLang(s)}catch(e){}
+  var pc=false; function setPC(on){pc=on; document.getElementById("mq").disabled=on; document.body.classList.toggle("pc",on);
+    document.body.style.zoom=on?(window.innerWidth/1440):""; 
+    document.getElementById("pcbtn").innerHTML=on?'<span class="fr">Version mobile</span><span class="en">Mobile view</span>':'<span class="fr">Version PC</span><span class="en">Desktop view</span>';
+    try{localStorage.setItem("munint-pc",on?"1":"0")}catch(e){} }
+  document.getElementById("pcbtn").onclick=function(){setPC(!pc)};
+  try{if(localStorage.getItem("munint-pc")==="1")setPC(true)}catch(e){}
+  window.addEventListener("resize",function(){if(pc)document.body.style.zoom=window.innerWidth/1440});
+  var target=new Date("2026-11-19T00:00:00+01:00").getTime();
+  function tick(){var d=Math.max(0,target-Date.now());
+    document.getElementById("cd-d").textContent=Math.floor(d/864e5);
+    document.getElementById("cd-h").textContent=String(Math.floor(d/36e5)%24).padStart(2,"0");
+    document.getElementById("cd-m").textContent=String(Math.floor(d/6e4)%60).padStart(2,"0");}
+  tick(); setInterval(tick,30000);
+})();
+</script>
+</body>
+</html>
