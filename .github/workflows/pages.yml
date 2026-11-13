@@ -13,7 +13,6 @@ concurrency:
   cancel-in-progress: true
 jobs:
   deploy:
-    if: ${{ hashFiles('site/**') != '' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
